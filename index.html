@@ -1,382 +1,653 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELEMENTAL Studio | Agencia Creativa & Asistencia Digital</title>
+    <title>ELEMENTAL Studio | Branding & Contenido Visual para Negocios Modernos</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#2563eb', // Azul Premium
+                            orange: '#f97316', // Naranja Eléctrico
+                            dark: '#020617', // Fondo ultra oscuro refinado
+                            card: '#0b0f19' // Fondo tarjeta
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            scroll-behavior: smooth;
             background-color: #020617;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; /* Desplazamiento fluido en dispositivos iOS */
         }
 
-        .brand-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
+        /* Degradados y Sombras Sutiles de Alta Gama */
+        .text-glow-blue {
+            text-shadow: 0 0 25px rgba(37, 99, 235, 0.35);
+        }
+        .text-glow-orange {
+            text-shadow: 0 0 25px rgba(249, 115, 22, 0.35);
+        }
+
+        /* Malla Digital de Fondo */
+        .grid-bg {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        }
+
+        /* Deslizador de Antes y Después (Móvil y Escritorio) */
+        .before-after-container {
             position: relative;
+            width: 100%;
+            height: 480px;
+            overflow: hidden;
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+        .before-image, .after-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            user-select: none;
+        }
+        .after-image {
+            width: 50%;
+            border-right: 3px solid #f97316;
+            z-index: 10;
+        }
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background-color: #f97316;
+            z-index: 20;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+        }
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            background-color: #f97316;
+            color: #020617;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: transform 0.2s ease;
+        }
+        .before-after-container:hover .slider-button {
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
-        .carbon-pattern {
-            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            opacity: 0.05;
+        /* MENÚ LATERAL PRO - CORREGIDO PARA EVITAR BLOQUEOS DE SCROLL */
+        #mobile-menu {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
+            transform: translateX(100%);
+            backdrop-filter: blur(20px);
+            visibility: hidden; /* Totalmente inactivo y sin capturar gestos cuando está cerrado */
+        }
+        #mobile-menu.active {
+            transform: translateX(0);
+            visibility: visible; /* Activo e interactivo únicamente cuando se abre */
         }
 
-        /* --- SERVICIOS PRO DESIGN --- */
+        /* Animación suave de botón de pulso */
+        .btn-pulse-orange {
+            box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+            animation: pulse-orange 2.2s infinite;
+        }
+        @keyframes pulse-orange {
+            0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(249, 115, 22, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+
+        /* SERVICIOS PRO REDISEÑO DE TARJETAS */
         .service-card-pro {
             position: relative;
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 2.5rem;
-            padding: 3rem 2rem;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            background: rgba(11, 15, 25, 0.45);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 2rem;
+            padding: 3.5rem 2.25rem 2.5rem 2.25rem;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
-            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            height: 520px;
         }
 
-        .service-card-pro:hover {
-            transform: translateY(-10px);
-            background: rgba(30, 41, 59, 0.7);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .service-card-pro.glow-blue:hover {
+            border-color: rgba(37, 99, 235, 0.25);
+            box-shadow: 0 30px 60px -15px rgba(37, 99, 235, 0.15);
+            transform: translateY(-8px);
         }
 
-        .icon-box {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%);
+        .service-card-pro.glow-orange:hover {
+            border-color: rgba(249, 115, 22, 0.25);
+            box-shadow: 0 30px 60px -15px rgba(249, 115, 22, 0.15);
+            transform: translateY(-8px);
+        }
+
+        /* Cajas de iconos premium */
+        .icon-box-pro {
+            width: 68px;
+            height: 68px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2rem;
-            font-size: 1.75rem;
-            color: #3b82f6;
-            transition: all 0.5s ease;
-            border: 1px solid rgba(59, 130, 246, 0.1);
+            font-size: 1.6rem;
+            transition: all 0.4s ease;
         }
 
-        .service-card-pro:hover .icon-box {
-            transform: scale(1.1) rotate(5deg);
-            background: #3b82f6;
-            color: white;
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+        .service-card-pro:hover .icon-box-pro {
+            transform: scale(1.08) rotate(3deg);
+            border-color: currentColor;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .service-card-pro h3 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
+        /* Botón Explorar Detalles */
+        .btn-explorar-pro {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            padding: 0.85rem 1.75rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            margin-top: auto;
         }
 
-        .service-card-pro p.desc-main {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            flex-grow: 1;
+        .service-card-pro:hover .btn-explorar-pro {
+            background: white;
+            color: #020617;
+            border-color: white;
+            box-shadow: 0 10px 20px -5px rgba(255, 255, 255, 0.2);
         }
 
-        /* PANEL DE DETALLES */
+        /* Panel de Detalles Animado Pro */
         .details-panel-pro {
             position: absolute;
             inset: 0;
-            background: #0f172a;
-            z-index: 100;
-            padding: 2.5rem 1.5rem;
-            display: none;
+            background: rgba(8, 12, 22, 0.98);
+            backdrop-filter: blur(24px);
+            z-index: 50;
+            padding: 3rem 2rem 2.5rem 2rem;
+            display: flex;
             flex-direction: column;
-            border-radius: 2.5rem;
-            animation: fadeIn 0.3s ease forwards;
+            justify-content: space-between;
+            border-radius: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.96) translateY(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .details-panel-pro.active {
-            display: flex;
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(0);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* MENÚ LATERAL */
-        #mobile-menu {
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: translateX(100%);
-            background: #020617;
-        }
-        #mobile-menu.active { transform: translateX(0); }
-
-        .nav-link-pro {
-            font-size: 2rem;
+        /* Micro-badge de número */
+        .number-badge-pro {
+            font-size: 0.75rem;
             font-weight: 800;
-            color: #f8fafc;
-            transition: all 0.3s ease;
-        }
-        .nav-link-pro:hover { color: #3b82f6; transform: translateX(10px); }
-
-        /* BOTONES DE ACCIÓN */
-        .btn-unificado {
-            width: 100%;
-            max-width: 320px;
-            padding: 1.15rem;
-            background: white;
-            color: #0f172a;
-            border-radius: 1rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .btn-pulse { animation: pulse-animation 2s infinite; }
-        @keyframes pulse-animation {
-            0% { box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0px rgba(255, 255, 255, 0); }
-        }
-
-        .pro-badge {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            padding: 4px 10px;
-            border-radius: 99px;
-            font-size: 0.6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
+            color: currentColor;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.5rem;
         }
     </style>
 </head>
-<body class="text-slate-100">
+<body class="text-slate-200 selection:bg-brand-orange/30 selection:text-white grid-bg">
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-[100] bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="text-2xl font-extrabold tracking-tighter text-white">
-                    ELEMENTAL<span class="text-blue-500 font-light">Studio</span>
+    <!-- Header / Navbar -->
+    <header class="fixed top-0 left-0 right-0 z-[80] bg-brand-dark/85 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#inicio" class="flex items-center gap-2">
+                <span class="text-xl font-extrabold tracking-tighter text-white font-display">
+                    ELEMENTAL<span class="text-brand-orange font-light">Studio</span>
                 </span>
-            </div>
-            <button onclick="toggleMobileMenu()" class="text-white text-2xl w-12 h-12 flex items-center justify-center rounded-full bg-blue-600/10 hover:bg-blue-600/20 transition">
+            </a>
+
+            <!-- Navegación Escritorio -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-400">
+                <a href="#servicios" class="hover:text-brand-orange transition-colors">Servicios</a>
+                <a href="#transformacion" class="hover:text-brand-orange transition-colors">Resultados</a>
+                <a href="#por-que" class="hover:text-brand-orange transition-colors">¿Por qué Elemental?</a>
+                <a href="https://api.whatsapp.com/send?phone=595982588379" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-brand-orange text-brand-dark rounded-full font-bold text-xs uppercase tracking-wider hover:bg-brand-orange/90 transition-all btn-pulse-orange">
+                    Asesoría Gratis
+                </a>
+            </nav>
+
+            <!-- Hamburguesa Móvil con z-index alto -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-white text-2xl focus:outline-none z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all" aria-label="Abrir Menú">
                 <i class="fas fa-bars-staggered"></i>
             </button>
         </div>
-    </nav>
+    </header>
 
-    <!-- Menú Lateral -->
-    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-full sm:w-[400px] z-[200] shadow-2xl flex flex-col p-10">
-        <div class="flex justify-between items-center mb-16">
-            <span class="text-lg font-extrabold tracking-tighter text-white">
-                ELEMENTAL<span class="text-blue-500 font-light">Studio</span>
-            </span>
-            <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white text-3xl transition">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <nav class="flex flex-col space-y-8">
-            <a href="#inicio" onclick="toggleMobileMenu()" class="nav-link-pro">inicio</a>
-            <a href="#servicios" onclick="toggleMobileMenu()" class="nav-link-pro">servicios</a>
-            <a href="#contacto" onclick="toggleMobileMenu()" class="nav-link-pro">contacto</a>
+    <!-- Overlay de Fondo para Menú Móvil -->
+    <div id="mobile-menu-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[85] hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Menú Lateral Desplegable Pro -->
+    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-full sm:w-[400px] z-[90] bg-[#030712]/95 border-l border-white/10 pt-28 pb-12 px-8 shadow-2xl flex flex-col justify-between">
+        <nav class="flex flex-col gap-8 text-left text-2xl font-bold">
+            <span class="text-brand-orange font-bold text-xs tracking-[0.25em] uppercase mb-4 block opacity-50">Navegación</span>
+            <a href="#servicios" onclick="toggleMobileMenu()" class="hover:text-brand-orange transition-all duration-300 transform hover:translate-x-2">Servicios</a>
+            <a href="#transformacion" onclick="toggleMobileMenu()" class="hover:text-brand-orange transition-all duration-300 transform hover:translate-x-2">Resultados</a>
+            <a href="#por-que" onclick="toggleMobileMenu()" class="hover:text-brand-orange transition-all duration-300 transform hover:translate-x-2">¿Por qué Elemental?</a>
         </nav>
+        
+        <div class="space-y-6">
+            <div class="h-[1px] bg-white/10"></div>
+            <a href="https://api.whatsapp.com/send?phone=595982588379" target="_blank" rel="noopener noreferrer" class="w-full py-4 bg-brand-orange text-brand-dark rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-3 btn-pulse-orange">
+                <i class="fab fa-whatsapp text-lg"></i> Hablar por WhatsApp
+            </a>
+            <p class="text-center text-slate-500 text-xs font-medium tracking-wide">ELEMENTAL Studio © 2026</p>
+        </div>
     </div>
 
-    <!-- Hero -->
-    <section id="inicio" class="brand-gradient min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <div class="absolute inset-0 carbon-pattern"></div>
-        <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
-            <span class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-blue-200 text-xs font-medium mb-6 backdrop-blur-md uppercase tracking-widest">
-                Agencia Digital
+    <!-- 1. HERO SECTION -->
+    <section id="inicio" class="min-h-screen pt-40 pb-20 flex items-center relative overflow-hidden bg-gradient-to-b from-brand-dark to-[#040815]">
+        <!-- Fondo Decorativo sutil (con pointer-events-none para que no bloquee los clics) -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-brand-blue/10 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-1/4 w-[350px] h-[350px] bg-brand-orange/5 rounded-full blur-[110px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-8">
+            <!-- Badge Superior -->
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-blue text-xs font-bold uppercase tracking-widest mx-auto">
+                <i class="fa-solid fa-sparkles"></i> Branding de Alta Conversión
             </span>
-            <h1 class="text-5xl md:text-8xl font-extrabold text-white leading-[1.1] mb-8 tracking-tighter">
-                Diseño que <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">impulsa marcas</span>
+            
+            <!-- Título Principal -->
+            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white font-display leading-[1.15] tracking-tight">
+                Branding + contenido visual para <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-orange">negocios modernos.</span>
             </h1>
-            <p class="text-lg md:text-xl text-blue-100/70 mb-12 max-w-2xl mx-auto">
-                No solo creamos contenido, construimos la autoridad visual que tu negocio necesita para destacar.
+            
+            <!-- Subtítulo -->
+            <p class="text-base sm:text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                Ayudamos a negocios a verse modernos, profesionales y memorables usando IA y branding estratégico.
             </p>
+
+            <!-- Llamadas a la Acción -->
+            <div class="flex flex-col sm:flex-row items-center gap-4 justify-center pt-4">
+                <a href="https://api.whatsapp.com/send?phone=595982588379" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 bg-brand-orange hover:bg-brand-orange/95 text-brand-dark font-extrabold rounded-full text-base tracking-wide flex items-center justify-center gap-3 transition-all transform hover:-translate-y-0.5 btn-pulse-orange">
+                    <i class="fab fa-whatsapp text-xl"></i> Hablar por WhatsApp
+                </a>
+                <a href="#transformacion" class="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-full text-base flex items-center justify-center gap-2 transition-all">
+                    Ver trabajos <i class="fa-solid fa-arrow-down-long"></i>
+                </a>
+            </div>
         </div>
     </section>
 
-    <!-- Servicios Pro Centrado -->
-    <section id="servicios" class="py-32 bg-[#020617]">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <div class="mb-20">
-                <h2 class="text-blue-500 font-bold text-xs uppercase tracking-[0.4em] mb-4">Soluciones</h2>
-                <h3 class="text-4xl md:text-6xl font-extrabold text-white tracking-tighter mb-6">Estrategia, Diseño y Contenido</h3>
-                <p class="text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-                    Potenciamos tu presencia digital con procesos claros y ejecución profesional.
+    <!-- 2. SECCIÓN SERVICIOS REDISEÑADA PRO -->
+    <section id="servicios" class="py-32 bg-brand-dark border-t border-white/5 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-20 space-y-4">
+                <span class="text-brand-blue font-bold text-xs uppercase tracking-[0.25em] block">Nuestras Soluciones</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white font-display tracking-tight leading-none">Servicios Premium</h2>
+                <p class="text-slate-400 text-sm leading-relaxed max-w-lg mx-auto">
+                    Potenciamos tu presencia digital con procesos claros, enfoque de negocio y ejecución profesional.
                 </p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <!-- 1. Gestión de Redes Sociales -->
-                <div class="service-card-pro group">
-                    <div class="pro-badge">Digital Growth</div>
-                    <div class="icon-box">
-                        <i class="fas fa-chart-line"></i>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Servicio 1: Gestión de Redes Sociales -->
+                <div class="service-card-pro glow-blue group">
+                    <div class="icon-box-pro text-brand-blue mb-8">
+                        <i class="fa-solid fa-chart-line"></i>
                     </div>
-                    <h3>Gestión de Redes Sociales</h3>
-                    <p class="desc-main">Estrategia y administración profesional de perfiles comerciales.</p>
-                    <button onclick="openPanel(this)" class="w-full py-4 text-[10px] font-bold uppercase tracking-widest text-blue-400 hover:text-white transition-colors border-t border-white/5">
+                    <h3 class="text-xl font-bold text-white mb-4">Gestión de Redes Sociales</h3>
+                    <p class="desc-main text-slate-400">
+                        Planificamos, creamos y optimizamos tu contenido para hacer crecer tu presencia digital de manera estratégica.
+                    </p>
+                    <button onclick="openPanel(this)" class="btn-explorar-pro text-slate-300 hover:text-white">
                         Explorar Detalles
                     </button>
 
-                    <div class="details-panel-pro">
-                        <div class="flex justify-between items-center mb-8">
-                            <span class="text-blue-500 font-bold text-[10px] tracking-widest uppercase">Social Media</span>
-                            <button onclick="closePanel(this)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
+                    <!-- Panel de Detalles Integrado Pro (Social Media) -->
+                    <div class="details-panel-pro border border-brand-blue/20">
+                        <div class="flex justify-between items-center pb-4 border-b border-white/5">
+                            <span class="text-brand-blue font-bold text-[10px] tracking-widest uppercase">Social Media</span>
+                            <button onclick="closePanel(this)" class="text-slate-400 hover:text-white transition-transform hover:scale-110">
+                                <i class="fas fa-times text-lg"></i>
+                            </button>
                         </div>
-                        <div class="space-y-8 text-left overflow-y-auto pr-2">
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-2 uppercase tracking-tighter">Creación</h4>
-                                <p class="text-slate-400 text-xs leading-relaxed">Contenido visual para posts, historias y reels de alto impacto.</p>
+                        <div class="space-y-6 text-left my-auto">
+                            <div class="flex gap-4 items-start">
+                                <span class="number-badge-pro text-brand-blue">01</span>
+                                <div>
+                                    <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-1">Creación</h4>
+                                    <p class="text-slate-400 text-xs leading-relaxed">Contenido visual para posts, historias y reels de alto impacto estético.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-2 uppercase tracking-tighter">Redacción</h4>
-                                <p class="text-slate-400 text-xs leading-relaxed">Copywriting optimizado con hashtags estratégicos.</p>
+                            <div class="flex gap-4 items-start">
+                                <span class="number-badge-pro text-brand-blue">02</span>
+                                <div>
+                                    <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-1">Redacción</h4>
+                                    <p class="text-slate-400 text-xs leading-relaxed">Copywriting altamente persuasivo optimizado con hashtags estratégicos.</p>
+                                </div>
                             </div>
                         </div>
-                        <button onclick="closePanel(this)" class="mt-auto bg-blue-600 text-white py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest">Cerrar</button>
+                        <button onclick="closePanel(this)" class="w-full bg-brand-blue hover:bg-brand-blue/90 text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">
+                            Cerrar detalle
+                        </button>
                     </div>
                 </div>
 
-                <!-- 2. Diseño Gráfico -->
-                <div class="service-card-pro group">
-                    <div class="pro-badge">Visual Identity</div>
-                    <div class="icon-box">
-                        <i class="fas fa-pen-nib"></i>
+                <!-- Servicio 2: Diseño Gráfico -->
+                <div class="service-card-pro glow-orange group">
+                    <div class="icon-box-pro text-brand-orange mb-8">
+                        <i class="fa-solid fa-pen-nib"></i>
                     </div>
-                    <h3>Diseño Gráfico</h3>
-                    <p class="desc-main">Conceptos visuales únicos que transforman la imagen de tu negocio.</p>
-                    <button onclick="openPanel(this)" class="w-full py-4 text-[10px] font-bold uppercase tracking-widest text-blue-400 hover:text-white transition-colors border-t border-white/5">
+                    <h3 class="text-xl font-bold text-white mb-4">Diseño Gráfico</h3>
+                    <p class="desc-main text-slate-400">
+                        Conceptos visuales únicos y profesionales que transforman la imagen comercial de tu negocio.
+                    </p>
+                    <button onclick="openPanel(this)" class="btn-explorar-pro text-slate-300 hover:text-white">
                         Explorar Detalles
                     </button>
 
-                    <div class="details-panel-pro">
-                        <div class="flex justify-between items-center mb-8">
-                            <span class="text-blue-500 font-bold text-[10px] tracking-widest uppercase">Diseño Visual</span>
-                            <button onclick="closePanel(this)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
+                    <!-- Panel de Detalles Integrado Pro (Diseño Gráfico) -->
+                    <div class="details-panel-pro border border-brand-orange/20">
+                        <div class="flex justify-between items-center pb-4 border-b border-white/5">
+                            <span class="text-brand-orange font-bold text-[10px] tracking-widest uppercase">Diseño Gráfico</span>
+                            <button onclick="closePanel(this)" class="text-slate-400 hover:text-white transition-transform hover:scale-110">
+                                <i class="fas fa-times text-lg"></i>
+                            </button>
                         </div>
-                        <div class="space-y-5 text-left overflow-y-auto pr-2">
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Publicidad</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Transformación de imágenes en anuncios profesionales de alto impacto.</p>
+                        <div class="space-y-4 text-left my-auto w-full">
+                            <div class="flex gap-3 items-start">
+                                <span class="number-badge-pro text-brand-orange">01</span>
+                                <div>
+                                    <h4 class="text-white font-bold text-[11px] uppercase tracking-wider mb-0.5">Publicidad</h4>
+                                    <p class="text-slate-400 text-[11px] leading-snug">Transformación de imágenes ordinarias en anuncios profesionales.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Retoque</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Edición y mejora de fotografías para un acabado premium.</p>
+                            <div class="flex gap-3 items-start">
+                                <span class="number-badge-pro text-brand-orange">02</span>
+                                <div>
+                                    <h4 class="text-white font-bold text-[11px] uppercase tracking-wider mb-0.5">Retoque</h4>
+                                    <p class="text-slate-400 text-[11px] leading-snug">Edición y mejora de fotografías para un acabado editorial premium.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Contenido</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Diseño para redes sociales (post, historias y reels) consistente.</p>
+                            <div class="flex gap-3 items-start">
+                                <span class="number-badge-pro text-brand-orange">03</span>
+                                <div>
+                                    <h4 class="text-white font-bold text-[11px] uppercase tracking-wider mb-0.5">Contenido</h4>
+                                    <p class="text-slate-400 text-[11px] leading-snug">Diseño para redes sociales (post, historias y reels) consistente.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Identidad</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Diseño de logos y tarjetas personalizados para tu marca.</p>
+                            <div class="flex gap-3 items-start">
+                                <span class="number-badge-pro text-brand-orange">04</span>
+                                <div>
+                                    <h4 class="text-white font-bold text-[11px] uppercase tracking-wider mb-0.5">Identidad</h4>
+                                    <p class="text-slate-400 text-[11px] leading-snug">Diseño de logos y tarjetas de presentación de nivel corporativo.</p>
+                                </div>
                             </div>
                         </div>
-                        <button onclick="closePanel(this)" class="mt-6 bg-blue-600 text-white py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest">Cerrar</button>
+                        <button onclick="closePanel(this)" class="w-full bg-brand-orange hover:bg-brand-orange/90 text-brand-dark py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all">
+                            Cerrar detalle
+                        </button>
                     </div>
                 </div>
-
-                <!-- 3. Video & Motion Design -->
-                <div class="service-card-pro group">
-                    <div class="pro-badge">Video Production</div>
-                    <div class="icon-box">
-                        <i class="fas fa-play"></i>
-                    </div>
-                    <h3>Video & Motion Design</h3>
-                    <p class="desc-main">Producción dinámica de Reels, Shorts y animaciones que elevan tu marca.</p>
-                    <button onclick="openPanel(this)" class="w-full py-4 text-[10px] font-bold uppercase tracking-widest text-blue-400 hover:text-white transition-colors border-t border-white/5">
-                        Explorar Detalles
-                    </button>
-
-                    <div class="details-panel-pro">
-                        <div class="flex justify-between items-center mb-8">
-                            <span class="text-blue-500 font-bold text-[10px] tracking-widest uppercase">Video Pro</span>
-                            <button onclick="closePanel(this)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="space-y-6 text-left overflow-y-auto pr-2">
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Edición Pro</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Montaje fluido, corrección de color y diseño sonoro envolvente.</p>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Motion Graphics</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Animación de fotos, productos y textos dinámicos de alto nivel.</p>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Optimización</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Formatos adaptados 100% para la mejor experiencia en móviles.</p>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-bold text-xs mb-1 uppercase tracking-tighter">Eventos & Social</h4>
-                                <p class="text-slate-400 text-[11px] leading-relaxed">Reels conmemorativos (cumpleaños) con narrativa emocional única.</p>
-                            </div>
-                        </div>
-                        <button onclick="closePanel(this)" class="mt-6 bg-blue-600 text-white py-3 rounded-lg text-[10px] font-bold uppercase tracking-widest">Cerrar</button>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Contacto -->
-    <section id="contacto" class="py-32 brand-gradient">
-        <div class="absolute inset-0 carbon-pattern"></div>
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <h2 class="text-4xl md:text-6xl font-extrabold mb-10 tracking-tighter text-white">¿Listo para el siguiente nivel?</h2>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a href="https://wa.me/595982588379" target="_blank" class="btn-unificado btn-pulse group">
-                    <i class="fab fa-whatsapp mr-3 text-xl text-green-500 group-hover:scale-110 transition"></i>
-                    WhatsApp
-                </a>
-                <a href="https://www.facebook.com/ElementalStudioAgency" target="_blank" class="btn-unificado btn-pulse group">
-                    <i class="fab fa-facebook-f mr-3 text-xl text-blue-600 group-hover:scale-110 transition"></i>
-                    Facebook
+    <!-- 3. TRANSFORMACIONES VISUALES (Antes / Después) -->
+    <section id="transformacion" class="py-24 bg-[#050b18] border-t border-white/5 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <span class="text-brand-orange font-bold text-xs uppercase tracking-[0.25em] block">Demostración</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-display tracking-tight">La percepción cambia todo.</h2>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Un diseño profesional puede transformar radicalmente cómo una marca es percibida por sus clientes.
+                </p>
+            </div>
+
+            <!-- Contenedor del Deslizador Interactivo de Antes y Después -->
+            <div class="max-w-3xl mx-auto">
+                <div class="before-after-container shadow-2xl" id="before-after-slider">
+                    <!-- Imagen de Fondo (Antes - Amateur) -->
+                    <div class="before-image flex flex-col justify-between p-8" style="background-image: linear-gradient(rgba(3,7,18,0.7), rgba(3,7,18,0.7)), url('https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=1200&auto=format&fit=crop');">
+                        <span class="px-4 py-1.5 bg-red-600/20 border border-red-500/40 text-red-400 text-xs font-bold rounded-md self-end tracking-wider uppercase">Antes / Amateur</span>
+                        <div class="text-left space-y-2">
+                            <span class="text-3xl font-extrabold font-display opacity-40">Negocio X</span>
+                            <p class="text-xs text-slate-500 max-w-xs">Tipografía predeterminada, colores planos, falta de foco estratégico.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Imagen Deslizable (Después - Elemental Studio) -->
+                    <div class="after-image flex flex-col justify-between p-8" id="after-img-container" style="background-image: linear-gradient(rgba(3,7,18,0.45), rgba(3,7,18,0.75)), url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop');">
+                        <span class="px-4 py-1.5 bg-brand-orange/20 border border-brand-orange/40 text-brand-orange text-xs font-bold rounded-md self-start tracking-wider uppercase">Después / Elemental</span>
+                        <div class="text-left space-y-2">
+                            <span class="text-3xl font-extrabold font-display text-white text-glow-orange">Negocio X</span>
+                            <p class="text-xs text-brand-orange max-w-xs font-medium">Tipografía personalizada, branding premium y foco de conversión.</p>
+                        </div>
+                    </div>
+
+                    <!-- El Deslizador Físico -->
+                    <div class="slider-handle" id="slider-drag-handle">
+                        <div class="slider-button">
+                            <i class="fa-solid fa-left-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-slate-500 mt-4 italic">
+                    <i class="fa-solid fa-arrows-left-right mr-2"></i> Arrastra el control central para ver la transformación.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. POR QUÉ IMPORTA EL BRANDING -->
+    <section id="por-que" class="py-24 bg-brand-dark border-t border-white/5 relative">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <!-- Declaración de Realidad Comercial -->
+            <div class="max-w-3xl mx-auto space-y-8 mb-16">
+                <blockquote class="text-xl sm:text-2xl font-medium text-slate-300 leading-relaxed font-sans italic">
+                    "Tu negocio puede tener un gran producto y aún verse <span class="text-brand-orange font-bold font-display not-italic">amateur online.</span>"
+                </blockquote>
+                <div class="w-12 h-1 bg-brand-orange/40 mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Los 3 Pilares clave -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <!-- Pilar 1 -->
+                <div class="p-8 bg-[#080c16]/50 rounded-3xl border border-white/5 space-y-4">
+                    <div class="text-brand-blue text-3xl font-bold font-display text-glow-blue">01</div>
+                    <h4 class="text-lg font-bold text-white uppercase tracking-tight">Confianza</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Un cliente que confía en tu imagen paga sin pedir rebajas. La profesionalidad online acorta los tiempos de venta.
+                    </p>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="p-8 bg-[#080c16]/50 rounded-3xl border border-white/5 space-y-4">
+                    <div class="text-brand-orange text-3xl font-bold font-display text-glow-orange">02</div>
+                    <h4 class="text-lg font-bold text-white uppercase tracking-tight">Profesionalismo</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Demuestra que te tomas en serio tu negocio. La diferencia entre ser percibido como una opción temporal o una marca líder.
+                    </p>
+                </div>
+
+                <!-- Pilar 3 -->
+                <div class="p-8 bg-[#080c16]/50 rounded-3xl border border-white/5 space-y-4">
+                    <div class="text-brand-blue text-3xl font-bold font-display text-glow-blue">03</div>
+                    <h4 class="text-lg font-bold text-white uppercase tracking-tight">Recordación</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Las marcas coherentes se memorizan un 70% más rápido. Sé la primera opción cuando tu cliente necesite tu solución.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CTA FINAL -->
+    <section id="contacto" class="py-28 bg-[#050b18] border-t border-white/5 relative overflow-hidden">
+        <!-- carbon-pattern ahora tiene pointer-events-none para que no interfiera con los clics del usuario -->
+        <div class="absolute inset-0 carbon-pattern pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 space-y-10">
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white leading-tight font-display tracking-tight max-w-2xl mx-auto">
+                ¿Tu marca transmite el verdadero valor de tu negocio?
+            </h2>
+            <p class="text-slate-400 text-base sm:text-lg max-w-xl mx-auto">
+                No dejes que una imagen desactualizada sabotee tus esfuerzos de ventas. Conéctate con nosotros ahora.
+            </p>
+            <div class="flex flex-col items-center pt-4">
+                <a href="https://api.whatsapp.com/send?phone=595982588379" target="_blank" rel="noopener noreferrer" class="px-10 py-5 bg-brand-orange hover:bg-brand-orange/95 text-brand-dark font-extrabold rounded-full text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1 shadow-xl btn-pulse-orange">
+                    <i class="fab fa-whatsapp text-2xl"></i> Hablar por WhatsApp
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-12 bg-slate-950 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-white font-bold text-sm mb-4">Desarrollado por Gustavo Mendez</p>
-            <p class="text-slate-600 text-[10px] font-bold tracking-[0.3em] uppercase">
+    <!-- FOOTER -->
+    <footer class="py-16 bg-brand-dark border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6 text-center space-y-6">
+            <p class="text-white font-bold text-base tracking-wide">
+                Desarrollado por Gustavo Mendez
+            </p>
+            <div class="w-12 h-0.5 bg-brand-orange/25 mx-auto"></div>
+            <p class="text-slate-600 text-[10px] font-bold tracking-[0.25em] uppercase">
                 © 2026 ELEMENTAL STUDIO — ASUNCIÓN, PY
             </p>
         </div>
     </footer>
 
+    <!-- Lógica de Interactividad y Control del Antes/Después -->
     <script>
+        // Control de menú móvil optimizado con overlay
         function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('active');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                overlay.classList.add('opacity-0');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 400);
+            } else {
+                overlay.classList.remove('hidden');
+                // Forzar reflow para animación
+                overlay.offsetHeight;
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                menu.classList.add('active');
+            }
         }
 
+        // Abrir y cerrar paneles de servicios
         function openPanel(btn) {
-            btn.parentElement.querySelector('.details-panel-pro').classList.add('active');
+            const card = btn.closest('.service-card-pro');
+            const panel = card.querySelector('.details-panel-pro');
+            panel.classList.add('active');
         }
 
+        // Se corrigió para cerrar buscando la clase contenedora correcta
         function closePanel(btn) {
-            btn.closest('.details-panel-pro').classList.remove('active');
+            const panel = btn.closest('.details-panel-pro');
+            panel.classList.remove('active');
         }
+
+        // Deslizador Antes / Después
+        const container = document.getElementById('before-after-slider');
+        const afterImg = document.getElementById('after-img-container');
+        const handle = document.getElementById('slider-drag-handle');
+        let isResizing = false;
+
+        function updateSlider(clientX) {
+            const rect = container.getBoundingClientRect();
+            const position = clientX - rect.left;
+            let percentage = (position / rect.width) * 100;
+            
+            // Límites para evitar que se desborde el slider
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            afterImg.style.width = percentage + '%';
+            handle.style.left = percentage + '%';
+        }
+
+        // Soporte para Mouse
+        container.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            updateSlider(e.clientX);
+        });
+
+        window.addEventListener('mouseup', () => {
+            isResizing = false;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            updateSlider(e.clientX);
+        });
+
+        // Soporte para Touch (Dispositivos Móviles)
+        container.addEventListener('touchstart', (e) => {
+            isResizing = true;
+            updateSlider(e.touches[0].clientX);
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            isResizing = false;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isResizing) return;
+            updateSlider(e.touches[0].clientX);
+        }, { passive: true });
     </script>
 </body>
 </html>
