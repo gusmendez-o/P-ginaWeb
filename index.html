@@ -314,16 +314,6 @@
             <p class="text-base sm:text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
                 Ayudamos a negocios a verse modernos, profesionales y memorables usando IA y branding estratégico.
             </p>
-
-            <!-- Llamadas a la Acción -->
-            <div class="flex flex-col sm:flex-row items-center gap-4 justify-center pt-4">
-                <a href="https://api.whatsapp.com/send?phone=595982588379" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 bg-brand-orange hover:bg-brand-orange/95 text-brand-dark font-extrabold rounded-full text-base tracking-wide flex items-center justify-center gap-3 transition-all transform hover:-translate-y-0.5 btn-pulse-orange">
-                    <i class="fab fa-whatsapp text-xl"></i> Hablar por WhatsApp
-                </a>
-                <a href="#transformacion" class="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-full text-base flex items-center justify-center gap-2 transition-all">
-                    Ver trabajos <i class="fa-solid fa-arrow-down-long"></i>
-                </a>
-            </div>
         </div>
     </section>
 
@@ -606,19 +596,6 @@
         const handle = document.getElementById('slider-drag-handle');
         let isResizing = false;
 
-        function updateSlider(clientX) {
-            const rect = container.getBoundingClientRect();
-            const position = clientX - rect.left;
-            let percentage = (position / rect.width) * 100;
-            
-            // Límites para evitar que se desborde el slider
-            if (percentage < 0) percentage = 0;
-            if (percentage > 100) percentage = 100;
-
-            afterImg.style.width = percentage + '%';
-            handle.style.left = percentage + '%';
-        }
-
         // Soporte para Mouse
         container.addEventListener('mousedown', (e) => {
             isResizing = true;
@@ -648,6 +625,19 @@
             if (!isResizing) return;
             updateSlider(e.touches[0].clientX);
         }, { passive: true });
+
+        function updateSlider(clientX) {
+            const rect = container.getBoundingClientRect();
+            const position = clientX - rect.left;
+            let percentage = (position / rect.width) * 100;
+            
+            // Límites para evitar que se desborde el slider
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            afterImg.style.width = percentage + '%';
+            handle.style.left = percentage + '%';
+        }
     </script>
 </body>
 </html>
